@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Custos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #F8F8F8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .logo {
+      color: #32BCA9;
+      font-size: 32px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    h2 {
+      color: #39414F;
+      font-size: 18px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .form-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .form-group input {
+      flex: 1;
+      min-width: 0;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #EAEAEA;
+      border-radius: 6px;
+      font-size: 14px;
+      color: #39414F;
+    }
+
+    input::placeholder {
+      color: #aaa;
+      transition: opacity 0.2s ease;
+    }
+
+    input:focus::placeholder,
+    input:not(:placeholder-shown)::placeholder {
+      opacity: 0;
+    }
+
+    input[disabled] {
+      background-color: #F8F8F8;
+      color: #39414F;
+      cursor: not-allowed;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #EAEAEA;
+      margin: 20px 0;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #32BCA9;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 30px;
+    }
+
+    .btn:hover {
+      background-color: #28a897;
+    }
+
+    .label {
+      font-size: 13px;
+      color: #39414F;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 25px 20px;
+      }
+
+      .form-group {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      h2 {
+        font-size: 16px;
+      }
+
+      .btn {
+        font-size: 15px;
+      }
+
+      .logo {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGO -->
+  <div class="logo">LOGO</div>
+
+  <!-- CONTAINER -->
+  <div class="container">
+    <h2>Produto</h2>
+    <div class="form-group">
+      <div style="flex:1">
+        <label class="label">Custo do produto (litro)</label>
+        <input id="precoLitro" type="number" placeholder="R$">
+      </div>
+      <div style="flex:1">
+        <label class="label">Qt de produto usado (L)</label>
+        <input id="quantidadeUsada" type="number" placeholder="R$">
+      </div>
+    </div>
+    <div class="form-group">
+      <div style="flex:1">
+        <label class="label">Custo do produto usado</label>
+        <input id="custoProdutoUsado" type="text" placeholder="R$" disabled>
+      </div>
+    </div>
+
+    <hr>
+
+    <h2>Variáveis</h2>
+    <div class="form-group">
+      <div style="flex:1">
+        <label class="label">Deslocamento</label>
+        <input id="deslocamento" type="number" placeholder="R$">
+      </div>
+      <div style="flex:1">
+        <label class="label">Mão de Obra</label>
+        <input id="maoDeObra" type="number" placeholder="R$">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div style="flex:1">
+        <label class="label">Margem de lucro (%)</label>
+        <input id="margemLucro" type="number" placeholder="%">
+      </div>
+      <div style="flex:1">
+        <label class="label">Outros custos</label>
+        <input id="outrosCustos" type="number" placeholder="R$">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div style="flex:1">
+        <label class="label">Custo total</label>
+        <input id="custoTotal" type="text" placeholder="R$" disabled>
+      </div>
+    </div>
+
+    <button class="btn" id="calcularBtn">Gerar resultado</button>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    document.getElementById('calcularBtn').addEventListener('click', function () {
+      // Pegar os valores
+      const precoLitro = parseFloat(document.getElementById('precoLitro').value) || 0;
+      const quantidadeUsada = parseFloat(document.getElementById('quantidadeUsada').value) || 0;
+      const deslocamento = parseFloat(document.getElementById('deslocamento').value) || 0;
+      const maoDeObra = parseFloat(document.getElementById('maoDeObra').value) || 0;
+      const margemLucro = parseFloat(document.getElementById('margemLucro').value) || 0;
+      const outrosCustos = parseFloat(document.getElementById('outrosCustos').value) || 0;
+
+      // Calcular o custo do produto usado
+      const custoProdutoUsado = precoLitro * quantidadeUsada;
+      document.getElementById('custoProdutoUsado').value = `R$ ${custoProdutoUsado.toFixed(2)}`;
+
+      // Calcular o custo total com margem de lucro
+      const subtotal = custoProdutoUsado + deslocamento + maoDeObra + outrosCustos;
+      const lucro = (margemLucro / 100) * subtotal;
+      const custoTotal = subtotal + lucro;
+
+      document.getElementById('custoTotal').value = `R$ ${custoTotal.toFixed(2)}`;
+    });
+  </script>
+</body>
+</html>
